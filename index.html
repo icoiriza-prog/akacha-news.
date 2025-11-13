@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Akacha Mohamed Media — الموقع الإعلامي لمؤسسة عكاشة محمد</title>
+
+  <!-- وصف الموقع للمحركات -->
+  <meta name="description" content="الموقع الإعلامي الرسمي لمؤسسة عكاشة محمد — آخر الأخبار، التواريخ المهمة، والمعلومات العامة حول أنشطة المدرسة والفعاليات.">
+
+  <!-- الكلمات المفتاحية المهمة -->
+  <meta name="keywords" content="أخبار المدرسة، مؤسسة عكاشة محمد، فعاليات مدرسية، تواريخ مهمة، إعلام، نشاطات طلابية">
+
+  <!-- اسم المؤلف -->
+  <meta name="author" content="Akacha Mohamed Media">
+
+  <!-- روابط التصميم -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- الأيقونة الصغيرة في التبويب -->
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+<body>
+
+<header>
+  <h1>Akacha Mohamed Media</h1>
+  <p>الموقع الإعلامي لمؤسسة عكاشة محمد</p>
+</header>
+
+<nav>
+  <a href="#home">الرئيسية</a>
+  <a href="#news">الأخبار</a>
+  <a href="#dates">التواريخ المهمة</a>
+  <a href="#info">معلومات عامة</a>
+</nav>
+
+<section id="home">
+  <h2>مرحبًا بكم!</h2>
+  <p class="editable" onclick="passwordProtectedEditText(this)">مرحبًا بكم في موقع <strong>Akacha Mohamed Media</strong>، المنصة الإعلامية التي تنقل لكم كل جديد حول أنشطة وأخبار مؤسسة عكاشة محمد.</p>
+</section>
+
+<section id="news">
+  <h2>الأخبار الحديثة</h2>
+  <button class="add-btn" onclick="passwordProtectedAdd('news')">+ إضافة خبر</button>
+  <div class="card-container" id="news-container"></div>
+</section>
+
+<section id="dates">
+  <h2>التواريخ المهمة</h2>
+  <button class="add-btn" onclick="passwordProtectedAdd('dates')">+ إضافة تاريخ</button>
+  <div class="card-container" id="dates-container"></div>
+</section>
+
+<section id="info">
+  <h2>معلومات عامة</h2>
+  <button class="add-btn" onclick="passwordProtectedAdd('info')">+ إضافة معلومات</button>
+  <div class="card-container" id="info-container"></div>
+</section>
+
+<footer>
+  <p>© 2025 Akacha Mohamed Media — جميع الحقوق محفوظة</p>
+</footer>
+
+<script>
+// كلمة المرور
+const PASSWORD = "9";
+
+// التحقق من كلمة المرور
+function checkPassword() {
+  const input = prompt("أدخل كلمة المرور للمتابعة:");
+  return input === PASSWORD;
+}
+
+// حفظ البيانات في localStorage
+function saveData() {
+  const sections = ['news', 'dates', 'info'];
+  sections.forEach(sec => {
+    const container = document.getElementById(sec + '-container');
+    localStorage.setItem(sec, container.innerHTML);
+  });
+}
+
+// تحميل البيانات عند بدء الصفحة
+function loadData() {
+  const sections = ['news', 'dates', 'info'];
+  sections.forEach(sec => {
+    const saved = localStorage.getItem(sec);
+    if (saved) {
+      document.getElementById(sec + '-container').innerHTML = saved;
+    }
+  });
+}
+
+// تحرير النصوص
+function passwordProtectedEditText(element) {
+  if (checkPassword()) {
+    const newText = prompt("عدل النص:", element.innerHTML);
+    if (newText !== null) element.innerHTML = newText;
+    saveData();
+  } else {
+    alert("كلمة المرور غير صحيحة!");
+  }
+}
+
+// تحرير الصور
+function passwordProtectedEditImage(img) {
+  if (checkPassword()) {
+    const newURL = prompt("أدخل رابط الصورة الجديد:", img.src);
+    if (newURL) img.src = newURL;
+    saveData();
+  } else {
+    alert("كلمة المرور غير صحيحة!");
+  }
+}
+
+// إضافة بطاقة جديدة
+function passwordProtectedAdd(section) {
+  if (!checkPassword()) {
+    alert("كلمة المرور غير صحيحة!");
+    return;
+  }
+  const container = document.getElementById(section + '-container');
+  let cardHTML = '';
+  if(section === 'news'){
+    cardHTML = `<div class="card">
+      <img src="https://via.placeholder.com/300x200" alt="خبر" onclick="passwordProtectedEditImage(this)">
+      <h3 class="editable" onclick="passwordProtectedEditText(this)">عنوان الخبر</h3>
+      <p class="editable" onclick="passwordProtectedEditText(this)">نص الخبر هنا.</p>
+    </div>`;
+  } else if(section === 'dates'){
+    cardHTML = `<div class="card">
+      <h3 class="editable" onclick="passwordProtectedEditText(this)">تاريخ</h3>
+      <p class="editable" onclick="passwordProtectedEditText(this)">وصف الحدث.</p>
+    </div>`;
+  } else if(section === 'info'){
+    cardHTML = `<div class="card">
+      <h3 class="editable" onclick="passwordProtectedEditText(this)">عنوان</h3>
+      <p class="editable" onclick="passwordProtectedEditText(this)">نص المعلومات.</p>
+    </div>`;
+  }
+  container.insertAdjacentHTML('beforeend', cardHTML);
+  saveData();
+}
+
+// تحميل البيانات عند بدء الصفحة
+loadData();
+</script>
+
+</body>
+</html>
