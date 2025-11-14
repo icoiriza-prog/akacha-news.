@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://icoiriza-prog.github.io/akacha-news/sitemap.xml
